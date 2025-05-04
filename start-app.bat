@@ -1,0 +1,3 @@
+@echo off
+echo Starting Next.js development server with Upstash Redis...
+npm run dev
