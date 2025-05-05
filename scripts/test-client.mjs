@@ -2,7 +2,7 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
 
 // Update this to your own Vercel deployment URL
-const origin = process.argv[2] || "https://your-project-name.vercel.app";
+const origin = process.argv[2] || "https://yadathingy-mcp.vercel.app/";
 
 async function main() {
   const transport = new SSEClientTransport(new URL(`${origin}/sse`));
