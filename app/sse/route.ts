@@ -1,8 +1,8 @@
 import { createServerResponseAdapter } from "@/lib/server-response-adapter";
 import { mcpHandler } from "../mcp";
 
-// Increased from 60 to 300 seconds to give more time for tool execution
-export const maxDuration = 300;
+// Increasing timeout to match vercel.json configuration
+export const maxDuration = 800;
 
 export async function GET(req: Request) {
   console.log("SSE route handler called, attempting to create connection");
