@@ -1,10 +1,10 @@
 {
   "functions": {
     "app/sse/route.ts": {
-      "maxDuration": 300
+      "maxDuration": 800
     },
     "app/mcp/route.ts": {
-      "maxDuration": 60
+      "maxDuration": 800
     }
   }
 }
