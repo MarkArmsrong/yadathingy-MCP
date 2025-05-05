@@ -1,10 +1,11 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
+import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
 
-const origin = process.argv[2] || "https://mcp-for-nextjs.vercel.app";
+// Update this to your own Vercel deployment URL
+const origin = process.argv[2] || "https://your-project-name.vercel.app";
 
 async function main() {
-  const transport = new StreamableHTTPClientTransport(new URL(`${origin}/mcp`));
+  const transport = new SSEClientTransport(new URL(`${origin}/mcp`));
 
   const client = new Client(
     {

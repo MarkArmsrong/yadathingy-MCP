@@ -16,5 +16,5 @@ Update `app/mcp.ts` with your tools, prompts, and resources following the [MCP T
 `script/test-client.mjs` contains a sample client to try invocations.
 
 ```sh
-node scripts/test-client.mjs https://mcp-for-next-js.vercel.app
+node scripts/test-client.mjs https://yadathingy-mcp.vercel.app
 ```
