@@ -8,6 +8,7 @@ const message = process.argv[3] || "Hello, World!";
 async function main() {
   console.log(`Testing echo tool with message="${message}"`);
   
+  // Changed back to using the /sse endpoint with increased timeout
   const transport = new SSEClientTransport(new URL(`${origin}/sse`));
 
   const client = new Client(

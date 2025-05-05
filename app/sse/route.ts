@@ -1,7 +1,8 @@
 import { createServerResponseAdapter } from "@/lib/server-response-adapter";
 import { mcpHandler } from "../mcp";
 
-export const maxDuration = 60;
+// Increased from 60 to 300 seconds to give more time for tool execution
+export const maxDuration = 300;
 
 export async function GET(req: Request) {
   console.log("SSE route handler called, attempting to create connection");

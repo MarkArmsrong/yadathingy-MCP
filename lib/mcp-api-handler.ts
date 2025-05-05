@@ -273,11 +273,12 @@ export function initializeMcpApiHandler(
       );
       console.log(`Published requests:${sessionId}`, serializedRequest);
 
+      // Increase timeout from 10 seconds to 30 seconds to allow more time for tool execution
       let timeout = setTimeout(async () => {
         await redis.unsubscribe(`responses:${sessionId}:${requestId}`);
         res.statusCode = 408;
         res.end("Request timed out");
-      }, 10 * 1000);
+      }, 30 * 1000);
 
       res.on("close", async () => {
         clearTimeout(timeout);
