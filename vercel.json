@@ -7,6 +7,37 @@
     "app/mcp/route.ts": {
       "maxDuration": 60,
       "memory": 1024
+    },
+    "app/message/route.ts": {
+      "maxDuration": 60,
+      "memory": 1024
+    },
+    "app/api/echo/route.ts": {
+      "maxDuration": 10,
+      "memory": 512
     }
-  }
+  },
+  "regions": ["sfo1"],
+  "routes": [
+    {
+      "src": "/api/echo",
+      "methods": ["POST"],
+      "dest": "/app/api/echo/route.ts"
+    },
+    {
+      "src": "/sse",
+      "methods": ["GET"],
+      "dest": "/app/sse/route.ts"
+    },
+    {
+      "src": "/mcp",
+      "methods": ["POST"],
+      "dest": "/app/mcp/route.ts"
+    },
+    {
+      "src": "/message",
+      "methods": ["POST"],
+      "dest": "/app/message/route.ts"
+    }
+  ]
 }
