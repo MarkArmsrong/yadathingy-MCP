@@ -26,7 +26,8 @@ async function main() {
   console.log("Connected", client.getServerCapabilities());
 
   const result = await client.listTools();
-  console.log(result);
+  const util = await import('util');
+  console.log(util.inspect(result, { depth: null, colors: true }));
   client.close();
 }
 
