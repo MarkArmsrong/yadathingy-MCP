@@ -1,10 +1,12 @@
 {
   "functions": {
     "app/sse/route.ts": {
-      "maxDuration": 800
+      "maxDuration": 800,
+      "memory": 1024
     },
     "app/mcp/route.ts": {
-      "maxDuration": 800
+      "maxDuration": 800,
+      "memory": 1024
     }
   }
 }

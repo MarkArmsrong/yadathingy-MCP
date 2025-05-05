@@ -147,46 +147,59 @@ export function initializeMcpApiHandler(
       const handleMessage = async (message: string) => {
         console.log("Received message from Redis", message);
         logInContext("log", "Received message from Redis", message);
-        const request = JSON.parse(message) as SerializedRequest;
+        try {
+          const request = JSON.parse(message) as SerializedRequest;
+          console.log(`Processing message for request ID: ${request.requestId}`);
 
-        // Make in IncomingMessage object because that is what the SDK expects.
-        const req = createFakeIncomingMessage({
-          method: request.method,
-          url: request.url,
-          headers: request.headers,
-          body: request.body, // This could already be an object from earlier parsing
-        });
-        const syntheticRes = new ServerResponse(req);
-        let status = 100;
-        let body = "";
-        syntheticRes.writeHead = (statusCode: number) => {
-          status = statusCode;
-          return syntheticRes;
-        };
-        syntheticRes.end = (b: unknown) => {
-          body = b as string;
-          return syntheticRes;
-        };
-        await transport.handlePostMessage(req, syntheticRes);
+          // Make in IncomingMessage object because that is what the SDK expects.
+          const req = createFakeIncomingMessage({
+            method: request.method,
+            url: request.url,
+            headers: request.headers,
+            body: request.body, // This could already be an object from earlier parsing
+          });
+          const syntheticRes = new ServerResponse(req);
+          let status = 100;
+          let body = "";
+          syntheticRes.writeHead = (statusCode: number) => {
+            status = statusCode;
+            console.log(`Setting response status code: ${statusCode}`);
+            return syntheticRes;
+          };
+          syntheticRes.end = (b: unknown) => {
+            body = b as string;
+            console.log(`Setting response body: ${typeof b === 'string' ? b.substring(0, 100) + '...' : 'non-string'}`);
+            return syntheticRes;
+          };
+          
+          console.log("About to call handlePostMessage");
+          await transport.handlePostMessage(req, syntheticRes);
+          console.log("Completed handlePostMessage");
 
-        await redisPublisher.publish(
-          `responses:${sessionId}:${request.requestId}`,
-          JSON.stringify({
-            status,
-            body,
-          })
-        );
-
-        if (status >= 200 && status < 300) {
-          logInContext(
-            "log",
-            `Request ${sessionId}:${request.requestId} succeeded: ${body}`
+          console.log(`Publishing response for ${sessionId}:${request.requestId}`);
+          await redisPublisher.publish(
+            `responses:${sessionId}:${request.requestId}`,
+            JSON.stringify({
+              status,
+              body,
+            })
           );
-        } else {
-          logInContext(
-            "error",
-            `Message for ${sessionId}:${request.requestId} failed with status ${status}: ${body}`
-          );
+          console.log(`Published response for ${sessionId}:${request.requestId}`);
+
+          if (status >= 200 && status < 300) {
+            logInContext(
+              "log",
+              `Request ${sessionId}:${request.requestId} succeeded: ${body}`
+            );
+          } else {
+            logInContext(
+              "error",
+              `Message for ${sessionId}:${request.requestId} failed with status ${status}: ${body}`
+            );
+          }
+        } catch (error) {
+          console.error("Error in handleMessage:", error);
+          logInContext("error", "Error in handleMessage:", error instanceof Error ? error.message : String(error));
         }
       };
 
